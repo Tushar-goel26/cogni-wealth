@@ -1,21 +1,20 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/lib/auth-context'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
+import { AppShell } from '@/components/layout/AppShell'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
   subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Cogni Wealth',
-  description: 'Your personal finance intelligence app',
+  title: 'Cogni Wealth — Financial Intelligence & Twin',
+  description:
+    'Tracks money, models your financial twin, explains what is happening, plans savings, and guides investing.',
 }
 
 export default function RootLayout({
@@ -26,10 +25,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} dark h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-gray-950 text-white">
-        <AuthProvider>{children}</AuthProvider>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{const t=localStorage.getItem('cogni-theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark');document.documentElement.classList.toggle('light',t==='light');}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col font-sans transition-colors">
+        <AuthProvider>
+          <ThemeProvider>
+            <AppShell>{children}</AppShell>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
