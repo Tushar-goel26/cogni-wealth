@@ -1,0 +1,2 @@
+// Merchants data placeholder
+export {};

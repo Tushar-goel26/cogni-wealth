@@ -1,0 +1,2 @@
+// Forecast logic placeholder
+export {};
